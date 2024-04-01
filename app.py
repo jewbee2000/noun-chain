@@ -9,7 +9,8 @@ and protected pages. The login route checks the username and password against th
 in if the credentials are correct. The protected route is only accessible to logged in users. The logout route logs
 the user out. The register route allows users to register by creating a new user in the users dictionary."""
 
-from flask import Flask, request, session, redirect, url_for
+from datetime import datetime
+from flask import Flask, request
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -21,6 +22,19 @@ login_manager.init_app(app)
 
 # A dictionary to store users as if it were a database
 users = {}
+
+# A dictionary to store the games as if it were a database
+games = {"04012024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04022024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04032024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04042024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04052024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04062024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04072024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04082024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04092024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04102024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1},
+         "04112024": {'from': 'dog', 'to': 'blade', 'steps': 6, 'expires': 1}}
 
 
 class User(UserMixin):
@@ -75,6 +89,17 @@ def logout():
 @login_required
 def protected():
     return 'Logged in as: ' + current_user.username
+
+
+@app.route('/game', methods=['GET'])
+# This function returns the game for the current date
+def game():
+    current_date = datetime.now()
+    date_str = current_date.strftime("%m%d%Y")
+    if date_str in games.keys():
+        return games[date_str]
+    else:
+        return 'No game for today'
 
 
 if __name__ == "__main__":

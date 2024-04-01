@@ -2,8 +2,12 @@
 <html>
 <head>
     <title>Test Frontend</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+    <h1>Today's Date</h1>
+    <p id="date"></p>
+
     <h1>Register</h1>
     <form action="http://localhost:5000/register" method="post">
         <label for="username">Username:</label><br>
@@ -31,5 +35,26 @@
     <form action="http://localhost:5000/protected" method="get">
         <input type="submit" value="Access Protected Page">
     </form>
+
+
+    <h1>Game</h1>
+    <form action="http://localhost:5000/game" method="get">
+        <input type="submit" value="Get Today's Game">
+    </form>
+
+    <script>
+    $(document).ready(function(){
+        // Display the current date
+        var date = new Date();
+        $('#date').text(date.toDateString());
+
+        // Function to get today's game
+        $("#gameButton").click(function(){
+            $.get("http://localhost:5000/game", function(data){
+                alert(JSON.stringify(data));
+            });
+        });
+    });
+    </script>
 </body>
 </html>
