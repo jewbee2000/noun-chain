@@ -52,10 +52,15 @@ def load_user(user_id):
 
 
 @app.route('/register', methods=['POST'])
-# This function is used to register a new user by adding them to the users dictionary
 def register():
     username = request.form.get('username')
     password = request.form.get('password')
+
+    # Check if a user with the provided username already exists
+    for user in users.values():
+        if user['username'] == username:
+            return 'A user with this username already exists. Please choose a different username.'
+
     password_hash = generate_password_hash(password)
     user_id = len(users) + 1  # Generate a simple user_id
     users[user_id] = {'username': username, 'password_hash': password_hash}
