@@ -32,7 +32,7 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = users.get(user_id)
+    user = users.get(int(user_id))
     if user:
         return User(user_id, user['username'], user['password_hash'])
 
@@ -45,7 +45,7 @@ def register():
     password_hash = generate_password_hash(password)
     user_id = len(users) + 1  # Generate a simple user_id
     users[user_id] = {'username': username, 'password_hash': password_hash}
-    return redirect(url_for('login'))
+    return 'User registered successfully. Please navigate to the login page to log in.'
 
 
 @app.route('/login', methods=['POST'])
@@ -58,11 +58,11 @@ def login():
             if check_password_hash(user['password_hash'], password):
                 user_obj = User(user_id, username, user['password_hash'])
                 login_user(user_obj)
-                return redirect(url_for('protected'))
+                return "Logged in successfully."
     return 'Invalid username or password'
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET', 'POST'])
 # This function is used to log a user out by calling the logout_user function
 @login_required
 def logout():
@@ -78,4 +78,5 @@ def protected():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='localhost', port=5000, debug=True)
+    # app.run(debug=True)

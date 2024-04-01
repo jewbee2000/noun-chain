@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Frontend</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form action="http://localhost:5000/register" method="post">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="Register">
+    </form>
+
+    <h1>Login</h1>
+    <form action="http://localhost:5000/login" method="post">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <h1>Logout</h1>
+    <form action="http://localhost:5000/logout" method="post">
+        <input type="submit" value="Logout">
+    </form>
+
+    <h1>Protected</h1>
+    <form action="http://localhost:5000/protected" method="get">
+        <input type="submit" value="Access Protected Page">
+    </form>
+</body>
+</html>
