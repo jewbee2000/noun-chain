@@ -18,7 +18,8 @@ class UsersController < Sinatra::Base
       response.set_cookie('user_uuid', value: @user.uuid, secure: true, httponly: true)
       redirect to("/users/#{@user.id}")
     else
-      # TODO: handle error
+      status 400
+      "Error: Failed to create user."
     end
   end
 
@@ -26,17 +27,23 @@ class UsersController < Sinatra::Base
   get '/users/:id' do
     uuid = request.cookies['user_uuid']
     @user = User.find_by(uuid: uuid)
-    # TODO: render game stats view
+    if @user
+      # TODO: render game stats view
+    else
+      status 404
+      "Error: No user found with the provided UUID."
+    end
   end
 
   # Update
   put '/users/:id' do
     uuid = request.cookies['user_uuid']
     @user = User.find_by(uuid: uuid)
-    if @user.update(params[:user])
+    if @user && @user.update(params[:user])
       redirect to("/users/#{@user.id}")
     else
-      # TODO: handle error
+      status 400
+      "Error: Failed to update user."
     end
   end
 
@@ -44,8 +51,12 @@ class UsersController < Sinatra::Base
   delete '/users/:id' do
     uuid = request.cookies['user_uuid']
     @user = User.find_by(uuid: uuid)
-    @user.destroy
-    response.delete_cookie('user_uuid')
-    redirect to('/users')
+    if @user && @user.destroy
+      response.delete_cookie('user_uuid')
+      redirect to('/users')
+    else
+      status 404
+      "Error: No user found with the provided UUID, or failed to delete user."
+    end
   end
 end
