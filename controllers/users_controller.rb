@@ -15,6 +15,7 @@ class UsersController < Sinatra::Base
   post '/users' do
     @user = User.new(params[:user])
     if @user.save
+      response.set_cookie('user_uuid', value: @user.uuid, secure: true, httponly: true)
       redirect to("/users/#{@user.id}")
     else
       # TODO: handle error
@@ -23,13 +24,15 @@ class UsersController < Sinatra::Base
 
   # Read
   get '/users/:id' do
-    @user = User.find(params[:id])
+    uuid = request.cookies['user_uuid']
+    @user = User.find_by(uuid: uuid)
     # TODO: render game stats view
   end
 
   # Update
   put '/users/:id' do
-    @user = User.find(params[:id])
+    uuid = request.cookies['user_uuid']
+    @user = User.find_by(uuid: uuid)
     if @user.update(params[:user])
       redirect to("/users/#{@user.id}")
     else
@@ -39,8 +42,10 @@ class UsersController < Sinatra::Base
 
   # Delete
   delete '/users/:id' do
-    @user = User.find(params[:id])
+    uuid = request.cookies['user_uuid']
+    @user = User.find_by(uuid: uuid)
     @user.destroy
+    response.delete_cookie('user_uuid')
     redirect to('/users')
   end
 end
