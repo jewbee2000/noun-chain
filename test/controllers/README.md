@@ -1,0 +1,1 @@
+The test/controllers directory will contain three test files for each controller.

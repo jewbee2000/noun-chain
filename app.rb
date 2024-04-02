@@ -17,6 +17,21 @@ enable :sessions
 # Connect to the SQLite database
 db = SQLite3::Database.new('wordchain.db')
 
+# Define the user model
+class User < ActiveRecord::Base
+  has_many :Game
+end
+
+# Define the game model
+class Game < ActiveRecord::Base
+end
+
+# Define the solution model
+class Solution < ActiveRecord::Base
+  belongs_to :User
+  belongs_to :Game
+end
+
 # Create the users table if it doesn't exist
 db.execute <<-SQL
   CREATE TABLE IF NOT EXISTS users (
