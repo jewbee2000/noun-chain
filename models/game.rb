@@ -16,5 +16,5 @@ class Game < ActiveRecord::Base
   attribute :date, :datetime
   attribute :start_word, :string
   attribute :end_word, :string
-  attribute :shortest_path, :string
+  attribute :shortest_path, :integer
 end
