@@ -1,1 +1,0 @@
-Three directories under the views directory: users, games, and solutions. Each directory will contain the views for the corresponding controller.

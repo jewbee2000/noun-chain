@@ -1,1 +1,0 @@
-The public directory contains static files and compiled assets.

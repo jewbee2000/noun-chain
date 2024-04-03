@@ -1,1 +1,0 @@
-The assets directory will contain all your static files like CSS, JavaScript, and images.
