@@ -14,6 +14,17 @@ require './models/solution'
 require 'json'
 
 class App < Sinatra::Base
+  before do
+    uuid = request.cookies['uuid']
+    @user = User.find_by(uuid: uuid)
+    unless @user
+      @user = User.create
+      response.set_cookie("uuid", :value => @user.uuid)
+      halt 401, { 'Content-Type' => 'application/json' }, 
+      { error: 'Error, UUID not found' }.to_json
+    end
+  end
+
   # GET /game
   get '/game' do
     @game = Game.find_by(date: Date.today)
@@ -27,8 +38,6 @@ class App < Sinatra::Base
 
   # GET /stats
   get '/stats' do
-    uuid = request.cookies['user_uuid']
-    @user = User.find_by(uuid: uuid)
     if @user
       @user.to_json
     else
@@ -39,8 +48,6 @@ class App < Sinatra::Base
 
   # PUT /soln
   put '/soln' do
-    uuid = request.cookies['user_uuid']
-    @user = User.find_by(uuid: uuid)
     @game = Game.find_by(game_number: params[:game_id])
 
     if @game && @game.date == Date.today
