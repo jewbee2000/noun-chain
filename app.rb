@@ -31,6 +31,7 @@ class App < Sinatra::Base
     if @game
       @game.to_json
     else
+      # TODO: This should never, ever happen. If it does, we need to be alerted somehow.
       status 404
       "Error: No game found for today's date."
     end
