@@ -29,16 +29,6 @@ class App < Sinatra::Base
       }.to_json
     end
 
-    def error_response(message, code = nil, data = nil)
-      response = {
-        status: 'error',
-        message: message
-      }
-      response[:code] = code if code
-      response[:data] = data if data
-      response.to_json
-    end
-
     def valid_soln(game, noun_array)
       # TODO: also check with the dictionary that the noun_array is a valid chain of compounds
       return (game.start_word == noun_array.first &&
@@ -52,8 +42,6 @@ class App < Sinatra::Base
     unless @user
       @user = User.create
       response.set_cookie("uuid", :value => @user.uuid)
-      halt 401, { 'Content-Type' => 'application/json' },
-      error_response(message: 'Error, UUID not found', code: 401)
     end
   end
 
@@ -63,8 +51,7 @@ class App < Sinatra::Base
     if @game
       success_response(@game)
     else
-      error_response("No game found for today's date.", 404)
-    end
+      fail_response("No game found for today's date.")    end
   end
 
   # GET /stats
