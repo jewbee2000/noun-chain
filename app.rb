@@ -56,7 +56,8 @@ class App < Sinatra::Base
     if @game
       success_response(@game)
     else
-      fail_response("No game found for today's date.")    end
+      fail_response("No game found for today's date.")
+    end
   end
 
   # GET /stats
