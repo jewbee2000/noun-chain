@@ -26,7 +26,7 @@ class App < Sinatra::Base
       }.to_json
     end
 
-    def fail_response(data, http_status = 200)
+    def fail_response(data, http_status = 404)
       status http_status
       {
         status: 'fail',
