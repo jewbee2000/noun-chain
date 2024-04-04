@@ -47,6 +47,7 @@ class App < Sinatra::Base
     unless @user
       @user = User.create
       response.set_cookie("uuid", :value => @user.uuid)
+      fail_response("uuid not found")
     end
   end
 
