@@ -38,12 +38,7 @@ class App < Sinatra::Base
 
   # GET /stats
   get '/stats' do
-    if @user
-      @user.to_json
-    else
-      status 404
-      "Error: No user found with the provided UUID."
-    end
+    @user.to_json
   end
 
   # PUT /soln
