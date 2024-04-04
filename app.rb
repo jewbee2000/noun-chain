@@ -75,21 +75,11 @@ class App < Sinatra::Base
   # PUT /soln
   put '/soln' do
     @game = Game.find_by(date: Date.today) # today's game
-    p params
-    if @game && @game.date == Date.today
-      @solution = Solution.find_by(user_id: @user.id, game_id: @game.id)
-
-      if @solution
-        if @solution.update(params[:solution])
-          success_response(@solution)
-        else
-          error_response("Failed to update the solution.", 400)
-        end
-      else
-        error_response("No solution found for the provided user and game.", 404)
-      end
+    if valid_soln(@game, params['d'])
+      # TODO increment the user's stats
+      success_response(@user)
     else
-      error_response("No game found with the provided game number, or the game is not for today's date.", 404)
+      fail_response({soln: 'invalid solution'})
     end
   end
 
