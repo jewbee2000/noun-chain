@@ -14,6 +14,9 @@ require './models/solution'
 require 'json'
 
 class App < Sinatra::Base
+
+  set :default_content_type, :json
+
   helpers do
     def success_response(data, http_status = 200)
       status http_status
