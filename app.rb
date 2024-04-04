@@ -14,6 +14,14 @@ require './models/solution'
 require 'json'
 
 class App < Sinatra::Base
+  helpers do
+    def valid_soln(game, noun_array)
+      # TODO: also check with the dictionary that the noun_array is a valid chain of compounds
+      return (game.start_word == noun_array.first &&
+              game.end_word == noun_array.last)
+    end
+  end
+  
   before do
     uuid = request.cookies['uuid']
     @user = User.find_by(uuid: uuid)
@@ -44,8 +52,8 @@ class App < Sinatra::Base
 
   # PUT /soln
   put '/soln' do
-    @game = Game.find_by(game_number: params[:game_id])
-
+    @game = Game.find_by(date: Date.today) # today's game
+    p params
     if @game && @game.date == Date.today
       @solution = Solution.find_by(user_id: @user.id, game_id: @game.id)
 
