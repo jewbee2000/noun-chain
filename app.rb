@@ -1,8 +1,8 @@
 """
-Author: Walter Teitelbaum
+Authors: Walter Teitelbaum, Ben Teitelbaum
 File: wordchain.rb
 Date: 4/1/2024
-Modified: 4/1/2024
+Modified: 4/3/2024
 
 Description: This file contains the backend for the wordchain game.
 """
