@@ -15,21 +15,45 @@ require 'json'
 
 class App < Sinatra::Base
   helpers do
+    def success_response(data)
+      {
+        status: 'success',
+        data: data
+      }.to_json
+    end
+
+    def fail_response(data)
+      {
+        status: 'fail',
+        data: data
+      }.to_json
+    end
+
+    def error_response(message, code = nil, data = nil)
+      response = {
+        status: 'error',
+        message: message
+      }
+      response[:code] = code if code
+      response[:data] = data if data
+      response.to_json
+    end
+
     def valid_soln(game, noun_array)
       # TODO: also check with the dictionary that the noun_array is a valid chain of compounds
       return (game.start_word == noun_array.first &&
               game.end_word == noun_array.last)
     end
   end
-  
+
   before do
     uuid = request.cookies['uuid']
     @user = User.find_by(uuid: uuid)
     unless @user
       @user = User.create
       response.set_cookie("uuid", :value => @user.uuid)
-      halt 401, { 'Content-Type' => 'application/json' }, 
-      { error: 'Error, UUID not found' }.to_json
+      halt 401, { 'Content-Type' => 'application/json' },
+      error_response(message: 'Error, UUID not found', code: 401)
     end
   end
 
@@ -37,17 +61,15 @@ class App < Sinatra::Base
   get '/game' do
     @game = Game.find_by(date: Date.today)
     if @game
-      @game.to_json
+      success_response(@game)
     else
-      # TODO: This should never, ever happen. If it does, we need to be alerted somehow.
-      status 404
-      "Error: No game found for today's date."
+      error_response("No game found for today's date.", 404)
     end
   end
 
   # GET /stats
   get '/stats' do
-    @user.to_json
+    success_response(@user)
   end
 
   # PUT /soln
@@ -59,18 +81,15 @@ class App < Sinatra::Base
 
       if @solution
         if @solution.update(params[:solution])
-          @solution.to_json
+          success_response(@solution)
         else
-          status 400
-          "Error: Failed to update the solution."
+          error_response("Failed to update the solution.", 400)
         end
       else
-        status 404
-        "Error: No solution found for the provided user and game."
+        error_response("No solution found for the provided user and game.", 404)
       end
     else
-      status 404
-      "Error: No game found with the provided game number, or the game is not for today's date."
+      error_response("No game found with the provided game number, or the game is not for today's date.", 404)
     end
   end
 
