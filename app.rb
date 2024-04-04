@@ -15,14 +15,16 @@ require 'json'
 
 class App < Sinatra::Base
   helpers do
-    def success_response(data)
+    def success_response(data, http_status = 200)
+      status http_status
       {
         status: 'success',
         data: data
       }.to_json
     end
 
-    def fail_response(data)
+    def fail_response(data, http_status = 200)
+      status http_status
       {
         status: 'fail',
         data: data
