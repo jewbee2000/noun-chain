@@ -8,6 +8,7 @@ Description: This file contains the backend for the wordchain game.
 """
 
 require 'sinatra/base'
+require 'sinatra/reloader' if development?
 require './models/game'
 require './models/user'
 require './models/solution'
@@ -17,6 +18,7 @@ require 'json'
 class App < Sinatra::Base
 
   set :default_content_type, :json
+  set :public_folder, 'public'
 
   helpers do
     def success_response(data, http_status = 200)
@@ -78,6 +80,11 @@ class App < Sinatra::Base
       response.set_cookie("uuid", :value => @user.uuid)
       fail_response("uuid not found")
     end
+  end
+
+  # GET /
+  get '/' do
+    send_file 'index.html'
   end
 
   # GET /game
