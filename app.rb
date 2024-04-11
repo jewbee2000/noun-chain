@@ -11,6 +11,7 @@ require 'sinatra/base'
 require './models/game'
 require './models/user'
 require './models/solution'
+require "redis"
 require 'json'
 
 class App < Sinatra::Base
@@ -35,13 +36,41 @@ class App < Sinatra::Base
     end
 
     def valid_soln(game, noun_array)
-      # TODO: also check with the dictionary that the noun_array is a valid chain of compounds
-      return (game.start_word == noun_array.first &&
-              game.end_word == noun_array.last)
+      # Initialize Redis
+      redis = Redis.new(host: "127.0.0.1", port: 6379)
+
+      # # Check Redis connection
+      # begin
+      #   pong = redis.ping
+      #   puts "Redis connection successful: #{pong}"
+      # rescue Redis::CannotConnectError
+      #   puts "Cannot connect to Redis"
+      #   return false
+      # end
+
+      # Check each compound noun in the array
+      noun_array.each_cons(2) do |first_noun, second_noun|
+        compound_noun = "#{first_noun} #{second_noun}".downcase
+        # puts "Checking compound noun: #{compound_noun}"
+        # If the compound noun does not exist in Redis, return false
+        compound_noun_value = redis.get(compound_noun)
+        # puts "Value of #{compound_noun} in Redis: #{compound_noun_value}"
+        if compound_noun_value.nil?
+          # puts "Compound noun #{compound_noun} does not exist in Redis"
+          return false
+        else
+          # puts "Compound noun #{compound_noun} exists in Redis"
+        end
+      end
+
+      # If all compound nouns exist in Redis, return true
+      # puts "All compound nouns exist in Redis"
+      true
     end
   end
 
   before do
+
     uuid = request.cookies['uuid']
     @user = User.find_by(uuid: uuid)
     unless @user
@@ -66,13 +95,16 @@ class App < Sinatra::Base
     success_response(@user)
   end
 
-  # PUT /soln
-  put '/soln' do
+  # POST /soln
+  post '/soln' do
+    data = JSON.parse(request.body.read)
+    puts "Received data: #{data}"
     @game = Game.find_by(date: Date.today) # today's game
-    if valid_soln(@game, params['d'])
+    if data['d'].is_a?(Array) && valid_soln(@game, data['d'])
       # TODO increment the user's stats
       success_response(@user)
     else
+      # puts "Data: #{data}"
       fail_response({soln: 'invalid solution'})
     end
   end
