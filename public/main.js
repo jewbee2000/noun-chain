@@ -82,8 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function getCurrentWordArr() {
-    const solutionLength = wordChain.length;
-    return wordChain[solutionLength - 1];
+    return wordChain[wordChain.length - 1];
   }
 
   // Event listeners for the rules icon and close button
@@ -116,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Get the last two words from the word chain
     const lastTwoWords = wordChain.slice(-2).map(wordArr => wordArr.join(''));
   
-    fetch('http://localhost:9292/chain', {
+    return fetch('http://localhost:9292/chain', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -129,24 +128,32 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.status === 'fail') {
         emptyChip.classList.remove('grey');
         emptyChip.classList.add('red');
+        return false;
       } else {
         emptyChip.classList.remove('grey');
         emptyChip.classList.add('green');
+        return true;
       }
     })
-    .catch((error) => console.error('Error:', error));
+    .catch((error) => {
+      console.error('Error:', error);
+      return false;
+    });
   }
 
   // Function to handle the submission of a word
-  function handleSubmitWord() {
+  async function handleSubmitWord() {
     const currentWordArr = getCurrentWordArr();
 
-    const currentWord = currentWordArr.join("");
+    // If the current word array is empty, return early
+    if (currentWordArr.length === 0) {
+      return;
+    }
 
     const emptyChip = document.querySelector('.chip.grey');
     if (emptyChip) {
 
-      validateWord(wordChain, emptyChip);
+      const currentWord = currentWordArr.join("");
 
       if (currentWord === endWord) {
         // Turn the grey chip green
@@ -175,43 +182,65 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch((error) => console.error('Error:', error));
         // Return here to prevent the creation of a new grey chip
         return;
-      }
-      else {
-        validateWord(wordChain);
-      }
+      } else {
+        // Validate the word
+        const isValid = await validateWord(wordChain, emptyChip);
+        if (isValid) {
 
-      // Create a new grey chip
-      const newChip = document.createElement('div');
-      newChip.classList.add('chip', 'grey');
-      document.getElementById('board-container').appendChild(newChip);
+          // Turn the grey chip green
+          emptyChip.classList.remove('grey');
+          emptyChip.classList.add('green');
 
-      // Set the focus to the new chip
-      newChip.focus();
-    }
+          // Create a new grey chip
+          const newChip = document.createElement('div');
+          newChip.classList.add('chip', 'grey');
+          document.getElementById('board-container').appendChild(newChip);
+          wordChain.push([]);
 
-    wordChain.push([]);
-  }
-
-  // Function to handle the deletion of a letter
-  function handleDeleteLetter() {
-    const currentWordArr = getCurrentWordArr();
-    const greyChip = document.querySelector('.chip.grey');
-
-    // If the current word array has letters, remove the last letter
-    if (currentWordArr.length > 0) {
-      currentWordArr.pop();
-    } else {
-      // Only if the wordChain length is greater than 1
-      if (greyChip && greyChip.textContent === '' && wordChain.length > 1) {
-        const greenChips = document.querySelectorAll('.chip.green');
-        if (greenChips.length > 0) {
-          const lastGreenChip = greenChips[greenChips.length - 1];
-          lastGreenChip.parentNode.removeChild(lastGreenChip);
-          wordChain.pop();
+          // Set the focus to the new chip
+          newChip.focus();
+        } else {
+          // If the word is not valid, turn the chip red
+          emptyChip.classList.remove('grey');
+          emptyChip.classList.add('red');
         }
       }
     }
   }
+
+  // Function to handle the deletion of a letter
+function handleDeleteLetter(emptyChip) {
+  const currentWordArr = getCurrentWordArr();
+
+  if (emptyChip) {
+    
+    if (currentWordArr.length > 0) {
+      emptyChip.textContent = emptyChip.textContent.slice(0, -1);
+      currentWordArr.pop();
+    } else {
+      if (emptyChip.textContent === '' && wordChain.length > 1) {
+        const greenChips = document.querySelectorAll('.chip.green');
+        if (greenChips.length > 0) {
+          const lastGreenChip = greenChips[greenChips.length - 1];
+          lastGreenChip.parentNode.removeChild(lastGreenChip);
+        }
+        wordChain.pop();
+        wordChain[wordChain.length - 1] = [];
+      }
+      return;
+    }
+  }
+  const redChips = document.querySelectorAll('.chip.red');
+  if (redChips.length > 0) {
+    const lastRedChip = redChips[redChips.length - 1];
+    // Turn the red chip back to grey
+    lastRedChip.classList.remove('red');
+    lastRedChip.classList.add('grey');
+    lastRedChip.textContent = '';
+    wordChain[wordChain.length - 1] = [];
+  }
+
+}
 
   // Event listeners for the keyboard buttons
   for (let i = 0; i < keys.length; i++) {
@@ -219,9 +248,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const letter = target.getAttribute("data-key");
 
       const emptyChip = document.querySelector('.chip.grey');
+        
       if (emptyChip && letter !== "enter" && letter !== "del") {
         emptyChip.textContent += letter;
-        updateWordChain(letter); // Update the word chain with the new letter
+        updateWordChain(letter);
       }
 
       if (letter === "enter") {
@@ -230,10 +260,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (letter === "del") {
-        emptyChip.textContent = emptyChip.textContent.slice(0, -1);
-        handleDeleteLetter();
+        handleDeleteLetter(emptyChip);
         return;
       }
+
     };
   }
 });
