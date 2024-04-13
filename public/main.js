@@ -174,9 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
           if (data.status === 'success') {
             // Display user's stats
             console.log('Success:', data.data);
-          } else {
-            // Display 'invalid' in an alert
-            window.alert('Invalid solution');
           }
         })
         .catch((error) => console.error('Error:', error));
