@@ -45,11 +45,8 @@ body {
   align-items: center;
 }
 
-header {
-  border-bottom: 1px solid rgb(58, 58, 60);
-}
-
 .title {
+  border-bottom: 1px solid rgb(58, 58, 60);
   color: #808080;
   font-size: 2.5rem;
   font-weight: bold;
@@ -57,6 +54,10 @@ header {
   margin-bottom: 0.4rem;
   text-align: center;
   font-family: 'Vulf Mono', sans-serif;
+}
+
+#game-details {
+  font-size: 1rem;
 }
 
 .icon-container {
@@ -90,10 +91,10 @@ header {
   display: none;
   position: fixed; 
   left: 50%;
-  top: 43%;
+  top: 46%;
   transform: translate(-50%, -50%);
   width: 35%;
-  height: 55%;
+  height: 52%;
   min-width: 400px;
   background-color: rgba(110, 110, 110, 0.9);
 }
@@ -155,6 +156,15 @@ header {
 
 .chip.grey {
   background-color: grey;
+}
+
+.chip.red {
+  background-color: rgb(255, 87, 87);
+}
+
+.small-chip {
+  font-size: 1rem;
+  padding: 5px;
 }
 
 #keyboard-container {
