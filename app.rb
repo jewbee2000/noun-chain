@@ -12,9 +12,17 @@ require './models/game'
 require './models/user'
 require './models/solution'
 require "redis"
+require 'rack/cors'
 require 'json'
 
 class App < Sinatra::Base
+  # TODO: This could be a security risk, but it's fine for now
+  use Rack::Cors do
+    allow do
+      origins '*'
+      resource '*', headers: :any, methods: [:get, :post, :options]
+    end
+  end
 
   set :default_content_type, :json
   set :public_folder, 'public'
@@ -93,6 +101,12 @@ class App < Sinatra::Base
   post '/soln' do
     data = JSON.parse(request.body.read)
     @game = Game.find_by(date: Date.today)
+
+    # Add a check for @game
+    unless @game
+      return fail_response("No game found for today's date.", 404)
+    end
+
     # check if the solution is valid and that the first and last words are the start and end words
     if data['d'].is_a?(Array) && valid_soln(@game, data['d']) && data['d'].first == @game.start_word && data['d'].last == @game.end_word
       # increment the user's stats based on how long their solution is compared to the shortest path of today's game
@@ -117,7 +131,6 @@ class App < Sinatra::Base
       @user.save
       fail_response({soln: 'invalid solution'})
     end
-
   end
 
 end
