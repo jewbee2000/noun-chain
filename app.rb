@@ -97,6 +97,22 @@ class App < Sinatra::Base
     success_response(@user)
   end
 
+  #POST /chain
+  post '/chain' do
+    data = JSON.parse(request.body.read)
+    puts "Received data: #{data}"
+
+    is_valid = data['d'].is_a?(Array) && valid_soln(@game, data['d'])
+    puts "Is valid: #{is_valid}"
+
+    if is_valid
+      success_response({chain: 'valid'})
+    else
+      fail_response({chain: 'invalid'})
+    end
+  end
+
+
   # POST /soln
   post '/soln' do
     data = JSON.parse(request.body.read)
