@@ -57,7 +57,7 @@ body {
 }
 
 #game-details {
-  font-size: 1rem;
+  font-size: max(2vw, .6rem);
 }
 
 .icon-container {
@@ -217,8 +217,8 @@ body {
 }
 
 .small-chip {
-  font-size: 1rem;
-  padding: 5px;
+  font-size: .75rem;
+  padding: 2px;
 }
 
 #keyboard-container {

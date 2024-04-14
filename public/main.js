@@ -128,7 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
         for (let key of keysToDisplay) {
           if (data.data.hasOwnProperty(key)) {
-            statsHTML += `<p>${key}: ${data.data[key]}</p>`;
+            // Remove underscore and capitalize
+            let formattedKey = key.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            statsHTML += `<p>${formattedKey}: ${data.data[key]}</p>`;
           }
         }
   
