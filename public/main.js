@@ -102,10 +102,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   rulesIcon.addEventListener('click', function() {
+    // Close other popups
+    statsPopup.style.display = 'none';
+    settingsPopup.style.display = 'none';
+  
+    // Open this popup
     rulesPopup.style.display = 'block';
   });
 
   statsIcon.addEventListener('click', function() {
+    // Close other popups
+    rulesPopup.style.display = 'none';
+    settingsPopup.style.display = 'none';
+
+    // Open this popup
     statsPopup.style.display = 'block';
   
     fetch('http://localhost:9292/stats')
@@ -128,6 +138,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   settingsIcon.addEventListener('click', function() {
+    // Close other popups
+    rulesPopup.style.display = 'none';
+    statsPopup.style.display = 'none';
+  
+    // Open this popup
     settingsPopup.style.display = 'block';
   });
 
