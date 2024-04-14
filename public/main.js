@@ -233,6 +233,8 @@ document.addEventListener("DOMContentLoaded", () => {
           if (data.status === 'success') {
             // Display user's stats
             console.log('Success:', data.data);
+            // Trigger a click on the stats icon
+            statsIcon.click();
           }
         })
         .catch((error) => console.error('Error:', error));
