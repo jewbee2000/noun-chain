@@ -67,13 +67,13 @@ class App < Sinatra::Base
   end
 
   before do
-
     uuid = request.cookies['uuid']
+    puts "UUID from cookie: #{uuid}"
     @user = User.find_by(uuid: uuid)
     unless @user
       @user = User.create
-      response.set_cookie("uuid", :value => @user.uuid)
-      fail_response("uuid not found")
+      response.set_cookie('uuid', value: @user.uuid, path: '/')
+      puts "New UUID set in cookie: #{@user.uuid}"
     end
   end
 
@@ -140,6 +140,7 @@ class App < Sinatra::Base
       else
         @user.plus_more += 1
       end
+
       @user.save
       success_response(@user)
     else

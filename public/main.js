@@ -88,20 +88,62 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event listeners for the rules icon and close button
   var rulesIcon = document.querySelector('.rules-icon');
   var rulesPopup = document.getElementById('rules-popup');
-  var close = document.getElementsByClassName('close')[0];
+  var closeRules = document.querySelector('#rules-popup .close');
+
+  var statsIcon = document.querySelector('.stats-icon');
+  var statsPopup = document.getElementById('stats-popup');
+  var statsContent = document.getElementById('stats-content');
+  var closeStats = document.querySelector('#stats-popup .close');
+
+  var settingsIcon = document.querySelector('.settings-icon');
+  var settingsPopup = document.getElementById('settings-popup');
+  var settingsContent = document.getElementById('settings-content');
+  var closeSettings = document.querySelector('#settings-popup .close');
+
 
   rulesIcon.addEventListener('click', function() {
     rulesPopup.style.display = 'block';
   });
 
-  close.onclick = function() {
+  statsIcon.addEventListener('click', function() {
+    statsPopup.style.display = 'block';
+  
+    fetch('http://localhost:9292/stats')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Stats:', data.data);
+  
+        let statsHTML = '';
+        const keysToDisplay = ['won', 'current_streak', 'max_streak', 'plus_1', 'plus_2', 'plus_3', 'plus_4', 'plus_5', 'plus_more'];
+  
+        for (let key of keysToDisplay) {
+          if (data.data.hasOwnProperty(key)) {
+            statsHTML += `<p>${key}: ${data.data[key]}</p>`;
+          }
+        }
+  
+        statsContent.innerHTML = statsHTML;
+      })
+      .catch(error => console.error('Error:', error));
+  });
+
+  settingsIcon.addEventListener('click', function() {
+    settingsPopup.style.display = 'block';
+  });
+
+  closeRules.onclick = function(event) {
+    event.stopPropagation();
     rulesPopup.style.display = 'none';
   }
+    
+  closeStats.onclick = function(event) {
+    event.stopPropagation();
+    statsPopup.style.display = 'none';
+  }
 
-  window.onclick = function(event) {
-    if (event.target == rulesPopup) {
-      rulesPopup.style.display = 'none';
-    }
+  closeSettings.onclick = function(event) {
+    event.stopPropagation();
+    settingsPopup.style.display = 'none';
   }
 
   function updateWordChain(letter) {
@@ -166,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ d: wordChain.flat() }),
+          body: JSON.stringify({ d: wordChain.map(wordArr => wordArr.join('')) }),
         })
         .then(response => response.json())
         .then(data => {

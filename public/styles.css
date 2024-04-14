@@ -91,7 +91,7 @@ body {
   display: none;
   position: fixed; 
   left: 50%;
-  top: 46%;
+  top: 47%;
   transform: translate(-50%, -50%);
   width: 35%;
   height: 52%;
@@ -102,6 +102,60 @@ body {
 .rules-popup h2, .rules-popup p {
   text-align: center;
   margin: 1rem 0;
+}
+
+.stats-popup {
+  display: none;
+  position: fixed; 
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  height: 52%;
+  min-width: 400px;
+  background-color: rgba(110, 110, 110, 0.9);
+}
+.stats-popup h2 {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.stats-popup p {
+  text-align: center;
+  margin-top: 0;
+}
+
+#stats-content {
+  font-size: 16px;
+  color: #333;
+  padding: 10px;
+}
+
+.settings-popup {
+  display: none;
+  position: fixed; 
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  height: 52%;
+  min-width: 400px;
+  background-color: rgba(110, 110, 110, 0.9);
+}
+.settings-popup h2 {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.settings-popup p {
+  text-align: center;
+  margin-top: 0;
+}
+
+#settings-content {
+  font-size: 16px;
+  color: #333;
+  padding: 10px;
 }
 
 /* The Close Button */
