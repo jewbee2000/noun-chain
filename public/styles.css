@@ -3,28 +3,10 @@
   padding: 0;
 }
 
-@font-face {
-  font-family: 'Vulf Mono';
-  src: url('"C:\Users\Walt\AppData\Local\Microsoft\Windows\Fonts\VulfMono-Regular.otf"');
-  font-weight: normal;
-}
-
-@font-face {
-  font-family: 'Vulf Mono';
-  src: url('"C:\Users\Walt\AppData\Local\Microsoft\Windows\Fonts\VulfMono-Bold.otf"');
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: 'Vulf Mono';
-  src: url('"C:\Users\Walt\AppData\Local\Microsoft\Windows\Fonts\VulfMono-Italic.otf"');
-  font-weight: italic;
-}
-
 html,
 body {
   height: 100%;
-  font-family: 'Vulf Mono', sans-serif;
+  font-family: 'Fixedsys', sans-serif;
 }
 
 #container {
@@ -53,7 +35,7 @@ body {
   margin-top: 3rem;
   margin-bottom: 0.4rem;
   text-align: center;
-  font-family: 'Vulf Mono', sans-serif;
+  font-family: 'Fixedsys', sans-serif;
 }
 
 #game-details {
@@ -217,8 +199,8 @@ body {
 }
 
 .small-chip {
-  font-size: .75rem;
-  padding: 2px;
+  font-size: max(1.5vw, .6rem);
+  padding: .5vw;
 }
 
 #keyboard-container {
