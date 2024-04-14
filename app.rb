@@ -12,17 +12,17 @@ require './models/game'
 require './models/user'
 require './models/solution'
 require "redis"
-require 'rack/cors'
+# require 'rack/cors'
 require 'json'
 
-class App < Sinatra::Base
-  # TODO: This could be a security risk, but it's fine for now
-  use Rack::Cors do
-    allow do
-      origins '*'
-      resource '*', headers: :any, methods: [:get, :post, :options]
-    end
-  end
+# class App < Sinatra::Base
+#   # TODO: This could be a security risk, but it's fine for now
+#   use Rack::Cors do
+#     allow do
+#       origins '*'
+#       resource '*', headers: :any, methods: [:get, :post, :options]
+#     end
+#   end
 
   set :default_content_type, :json
   set :public_folder, 'public'
