@@ -1,6 +1,6 @@
 """
 Authors: Walter Teitelbaum, Ben Teitelbaum
-File: wordchain.rb
+File: app.rb
 Date: 4/1/2024
 Modified: 4/3/2024
 
@@ -79,7 +79,7 @@ class App < Sinatra::Base
 
   # GET /
   get '/' do
-    send_file 'index.html'
+    send_file File.join(settings.public_folder, 'index.html')
   end
 
   # GET /game
