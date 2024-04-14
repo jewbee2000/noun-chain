@@ -15,7 +15,7 @@ require "redis"
 # require 'rack/cors'
 require 'json'
 
-# class App < Sinatra::Base
+class App < Sinatra::Base
 #   # TODO: This could be a security risk, but it's fine for now
 #   use Rack::Cors do
 #     allow do
