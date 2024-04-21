@@ -8,9 +8,7 @@ Description: This file contains the backend for the wordchain game.
 """
 
 require 'sinatra/base'
-require './models/game'
-require './models/user'
-require './models/solution'
+require './models/init'
 require "redis"
 # require 'rack/cors'
 require 'json'
