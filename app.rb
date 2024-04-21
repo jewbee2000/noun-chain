@@ -83,6 +83,7 @@ class App < Sinatra::Base
   # GET /game
   get '/game' do
     @game = Game.find_by(date: Date.today)
+    @game ||= Game.first # Useful for testing whem Game table isn't pre-populated
     if @game
       success_response(@game)
     else
