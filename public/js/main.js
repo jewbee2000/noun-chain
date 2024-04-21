@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to fetch the starting and ending words
   function getStartAndEndWords() {
     // Fetch the game data when the page loads
-    fetch('http://localhost:9292/game')
+    fetch('/game')
       .then(response => response.json())
       .then(game => {
         // Set the start and end words
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Open this popup
     statsPopup.style.display = 'block';
   
-    fetch('http://localhost:9292/stats')
+    fetch('/stats')
       .then(response => response.json())
       .then(data => {
         console.log('Stats:', data.data);
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Get the last two words from the word chain
     const lastTwoWords = wordChain.slice(-2).map(wordArr => wordArr.join(''));
   
-    return fetch('http://localhost:9292/chain', {
+    return fetch('/chain', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
         emptyChip.classList.add('green');
 
         // Post the solution to the server
-        fetch('http://localhost:9292/soln', {
+        fetch('/soln', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
