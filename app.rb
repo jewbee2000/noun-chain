@@ -13,6 +13,10 @@ require "redis"
 # require 'rack/cors'
 require 'json'
 
+# Initialize Redis
+REDIS = Redis.new
+SET_NAME = "wordchain-dict"
+
 class App < Sinatra::Base
 #   # TODO: This could be a security risk, but it's fine for now
 #   use Rack::Cors do
@@ -48,14 +52,11 @@ class App < Sinatra::Base
     end
 
     def valid_soln(game, noun_array)
-      # Initialize Redis
-      redis = Redis.new(host: "127.0.0.1", port: 6379)
-
       # Check each compound noun in the array
       noun_array.each_cons(2) do |first_noun, second_noun|
         compound_noun = normalized_compound(first_noun, second_noun)
         # If the compound noun does not exist in Redis, return false
-        unless redis.exists?(compound_noun)
+        unless REDIS.sismember(SET_NAME, compound_noun)
           return false
         end
       end
