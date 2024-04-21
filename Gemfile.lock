@@ -40,7 +40,7 @@ GEM
     rackup (2.1.0)
       rack (>= 3)
       webrick (~> 1.8)
-    rake (13.2.0)
+    rake (13.2.1)
     redis (5.1.0)
       redis-client (>= 0.17.0)
     redis-client (0.22.0)
@@ -68,7 +68,7 @@ GEM
     sinatra-activerecord (2.0.27)
       activerecord (>= 4.1)
       sinatra (>= 1.0)
-    sqlite3 (1.7.3-x64-mingw-ucrt)
+    sqlite3 (1.7.3-x86_64-linux)
     tilt (2.3.0)
     timeout (0.4.1)
     tzinfo (2.0.6)
@@ -76,7 +76,7 @@ GEM
     webrick (1.8.1)
 
 PLATFORMS
-  x64-mingw-ucrt
+  x86_64-linux
 
 DEPENDENCIES
   rack-test
@@ -89,7 +89,7 @@ DEPENDENCIES
   sqlite3
 
 RUBY VERSION
-   ruby 3.3.0p0
+   ruby 3.1.4p223
 
 BUNDLED WITH
-   2.5.3
+   2.3.26
