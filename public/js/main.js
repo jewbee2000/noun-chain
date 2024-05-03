@@ -276,7 +276,8 @@ function handleDeleteLetter(emptyChip) {
       emptyChip.textContent = emptyChip.textContent.slice(0, -1);
       currentWordArr.pop();
     } else {
-      if (emptyChip.textContent === '' && wordChain.length > 1) {
+      // Prevent deletion if the wordChain length is less than or equal to 2
+      if (wordChain.length > 2 && emptyChip.textContent === '') {
         const greenChips = document.querySelectorAll('.chip.green');
         if (greenChips.length > 0) {
           const lastGreenChip = greenChips[greenChips.length - 1];
