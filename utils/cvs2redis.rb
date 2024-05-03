@@ -25,12 +25,17 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-csv_file = ARGV.shift
 redis = Redis.new
+
+csv_file = ARGV.shift
+ts = Time.now.to_i.to_s
+redis.set("src:#{ts}", csv_file)
 
 CSV.foreach(csv_file, headers: true) do |row|
   next if options[:bool] and row.fields.last != "TRUE"
   compound = normalized_compound(row[1], row[2])
   redis.sadd(SET_NAME, compound)
+  redis.hset(compound, :freq, 1, :src, '')
+
 end
 
